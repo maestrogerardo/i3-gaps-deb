@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+# namespace: igd
+
+# Log (to stderr)
+# Only processes _one_ argument
+igd_log()
+{
+	local msg=${1}
+	echo ${msg} >&2
+}
+
+main()
+{
+	igd_log "Hello world!"
+}
+
+main
