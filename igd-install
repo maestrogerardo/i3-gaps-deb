@@ -1,18 +1,226 @@
 #!/bin/bash -e
 
-# namespace: igd
+# Namespace: igd
 
-# Log (to stderr)
-# Only processes _one_ argument
+# Variables
+igd_BASEDIR="$(pwd)"
+igd_GITDIR="${igd_BASEDIR}/i3-gaps"
+igd_GITURL="https://www.github.com/Airblader/i3"
+igd_TIMESTAMP=i"$(date +%Y%m%d%H%M%S)"
+
+# Functions
+
 igd_log()
 {
-	local msg=${1}
-	echo ${msg} >&2
+	local msg="${1}"
+	tput setaf 3; printf "[igd] " >&2; tput sgr0
+	tput setaf 7; printf "${msg}\n" >&2; tput sgr0
+}
+
+
+igd_question()
+{
+	local result=1 # false
+	local question="${1}"
+
+	tput setaf 3; printf "\n[igd] "; tput sgr0
+	tput setaf 7; printf "${question}"; tput sgr0
+	printf " (y/N): "
+	read answer
+	if [ "${answer}" = "y" ]; then
+		result=0
+	fi
+
+	return ${result}
+}
+
+igd_readAndContinue()
+{
+	local msg="${1}"
+	tput setaf 3; printf "\n[igd] "; tput sgr0
+	tput setaf 7; printf "${msg}"; tput sgr0
+	read -p " [RETURN]"
+}
+
+igd_checkSourcesList()
+{
+	igd_log "Checking sources.lists* to contain sources (\"weak\")..."
+
+	if ! grep --quiet -r "deb-src.*main" /etc/apt/sources.list*; then
+		igd_readAndContinue "Pleas add \"deb-src\" line to your sources.list."
+		igd_readAndContinue "And run \"apt update\" afterwards."
+		exit 1
+	fi
+}
+
+igd_installBuildDeps()
+{
+	igd_log "Installing build dependencies..."
+	sudo apt-get build-dep i3-wm
+}
+
+igd_selectBranch()
+{
+	local branch="gaps"
+	local alternative="gaps-next"
+
+	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise)"; then
+		branch=${alternative}
+	fi
+
+	git checkout ${branch}
+}
+
+igd_prepareGitStuff()
+{
+	igd_log "Preparing git stuff..."
+	git reset --hard HEAD
+	git clean -fdx
+	git pull
+}
+
+igd_clone()
+{
+	if [ ! -d ${igd_GITDIR} ]; then
+		igd_readAndContinue "Cloning i3 gaps into \"${igd_GITDIR}\"..."
+		git clone ${igd_GITURL} ${igd_GITDIR}
+	else
+		igd_log "Skip cloning as ${igd_GITDIR} already exists."
+	fi
+}
+
+igd_switchToGitDir()
+{
+	igd_log "Entering directory ${igd_GITDIR}..."
+	cd ${igd_GITDIR}
+}
+
+igd_updateDebianChangelog()
+{
+	igd_log "Umpdating Debian changelog..."
+	DEBEMAIL="g-a-d@web.de" \
+	DEBFULLNAME="Gerardo" \
+	debchange --preserve --dist=unstable --local=gerardo+${igd_TIMESTAMP} "New upstream."
+}
+
+igd_fixRules()
+{
+	igd_log "Fix rules file..."
+	cat <<EOF >>debian/rules
+
+override_dh_install:
+override_dh_installdocs:
+override_dh_installman:
+	dh_install -O--parallel
+EOF
+}
+
+igd_buildDebianPackage()
+{
+	igd_log "Build Debian package..."
+	dpkg-buildpackage --unsigned-source --unsigned-changes
+}
+
+igd_installDebianPackages()
+{
+	local debs=$(ls ../i3_*${igd_TIMESTAMP}*deb ../i3-wm_*${igd_TIMESTAMP}*deb)
+	echo; igd_log "Result: ${debs}"
+	if igd_question "Install Debian packages?"; then
+		sudo dpkg -i ${debs}
+	fi
+}
+
+igd_cleanUp()
+{
+	pwd
+	if igd_question "Remove created files?"; then
+		rm -v ../*${igd_TIMESTAMP}*
+	fi
+}
+
+igd_configHint()
+{
+	igd_readAndContinue "Add the following lines to your i3 config and restart..."
+	cat <<EOF > /dev/stdout
+#### i3-gaps stuff ####
+
+# Necessary for i3-gaps to work properly (pixel can be any value)
+for_window [class="^.*"] border pixel 3
+
+# Some color adjustments
+client.focused_inactive #000000 #000000 #000000 #000000 #000000
+client.unfocused        #000000 #000000 #000000 #000000 #000000
+
+
+# Set inner/outer gaps
+gaps inner 12
+gaps outer -2
+
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+### Smart Gaps
+smart_gaps on
+
+### Smart Borders
+smart_borders on
+EOF
 }
 
 main()
 {
-	igd_log "Hello world!"
+	if [ ${#} -ne 0 ]; then
+		echo "Usage: ${0}"
+		exit 23
+	fi
+
+	igd_checkSourcesList
+	igd_installBuildDeps
+	igd_clone
+	igd_switchToGitDir
+	igd_prepareGitStuff
+	igd_selectBranch
+	igd_updateDebianChangelog
+	igd_fixRules
+	igd_buildDebianPackage
+	igd_installDebianPackages
+	igd_cleanUp
+	igd_configHint
 }
 
-main
+main ${@}
