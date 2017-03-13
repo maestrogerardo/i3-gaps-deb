@@ -51,7 +51,7 @@ igd_handleJessieSpecialCase()
 		sed -i 's/libcairo2-dev (>= 1\.14\.4)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
 		sed -i 's/cairo >= 1\.14\.4/cairo >= 1\.14\.0/g' ${f2}
 	else
-		igd_log "Debian version != jessie..."
+		igd_log "Debian version != jessie, ignoring special treatment..."
 	fi
 }
 
