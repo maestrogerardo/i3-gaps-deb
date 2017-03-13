@@ -41,20 +41,6 @@ igd_readAndContinue()
 	read -p " [RETURN]"
 }
 
-igd_handleJessieSpecialCase()
-{
-	if grep --quiet ^8 /etc/debian_version; then
-		igd_readAndContinue "Debian jessie detected. Correcting dependency stuff..."
-
-		local f1="${igd_GITDIR}/debian/control"
-		local f2="${igd_GITDIR}/configure.ac"
-		sed -i 's/libcairo2-dev (>= 1\.14\.4)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
-		sed -i 's/cairo >= 1\.14\.4/cairo >= 1\.14\.0/g' ${f2}
-	else
-		igd_log "Debian version != jessie, ignoring special treatment..."
-	fi
-}
-
 igd_checkSourcesList()
 {
 	igd_log "Checking sources.lists* to contain sources (\"weak\")..."
@@ -140,6 +126,20 @@ igd_installDebianPackages()
 	echo; igd_log "Result: ${debs}"
 	if igd_question "Install Debian packages?"; then
 		sudo dpkg -i ${debs}
+	fi
+}
+
+igd_handleJessieSpecialCase()
+{
+	if grep --quiet ^8 /etc/debian_version; then
+		igd_readAndContinue "Debian jessie detected. Correcting dependency stuff..."
+
+		local f1="${igd_GITDIR}/debian/control"
+		local f2="${igd_GITDIR}/configure.ac"
+		sed -i 's/libcairo2-dev (>= 1\.14\.4)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
+		sed -i 's/cairo >= 1\.14\.4/cairo >= 1\.14\.0/g' ${f2}
+	else
+		igd_log "Debian version != jessie, ignoring special treatment..."
 	fi
 }
 
