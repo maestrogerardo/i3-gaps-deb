@@ -60,9 +60,9 @@ igd_readAndContinue()
 
 igd_startupHint()
 {
-	igd_readAndContinue "This tool creates (and optionally installs) Debian packages for i3-gaps..."
+	igd_readAndContinue "This tool creates (and optionally installs) Debian packages of i3-gaps..."
 	igd_readAndContinue "This tool comes without any warranty and in the hope to be useful..."
-	igd_readAndContinue "This tool assumes that you've i3 installed already..."
+	igd_readAndContinue "This tool assumes that you have i3 already installed..."
 }
 
 igd_checkSourcesList()
