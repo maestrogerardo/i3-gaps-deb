@@ -198,7 +198,7 @@ igd_installDebianPackages()
 {
 	local debs=$(ls ../i3_*${igd_TIMESTAMP}*deb ../i3-wm_*${igd_TIMESTAMP}*deb)
 	echo; igd_log "Result: ${debs}"
-	if igd_question "Install Debian packages?"; then
+	if igd_question "Install created Debian packages?"; then
 		sudo dpkg -i ${debs}
 	fi
 }
@@ -229,7 +229,7 @@ igd_cleanUp()
 
 igd_configHint()
 {
-	igd_readAndContinue "Append the following lines to your i3 config and restart..."
+	igd_readAndContinue "Please append the following lines manually to your i3 config and restart..."
 	cat <<EOF > /dev/stdout
 ### i3-gaps stuff ###
 
