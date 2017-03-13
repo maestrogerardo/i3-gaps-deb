@@ -67,7 +67,7 @@ igd_startupHint()
 
 igd_checkSourcesList()
 {
-	igd_log "Checking sources.lists* to contain sources (\"weak\")..."
+	igd_log "Checking sources.lists(*) to contain sources (\"weak\")..."
 
 	if ! grep --quiet -r "deb-src.*main" /etc/apt/sources.list*; then
 		igd_readAndContinue "Please add necessary \"deb-src\" line(s) to your sources.list (and run an update)."
@@ -97,7 +97,7 @@ igd_isJessie()
 
 igd_ensurePotentialJessieBackportsAvailability()
 {
-	igd_log "Checking sources.lists* to contain jessie-backports (\"weak\")..."
+	igd_log "Checking sources.list(s) to contain jessie-backports (\"weak\")..."
 
 	if ! grep --quiet -r "deb-src.*-backports" /etc/apt/sources.list*; then
 		igd_readAndContinue "Please add \"jessie-backport sources\" to your sources.list (and run an update)."
