@@ -60,8 +60,7 @@ igd_checkSourcesList()
 	igd_log "Checking sources.lists* to contain sources (\"weak\")..."
 
 	if ! grep --quiet -r "deb-src.*main" /etc/apt/sources.list*; then
-		igd_readAndContinue "Pleas add \"deb-src\" line to your sources.list."
-		igd_readAndContinue "And run \"apt update\" afterwards."
+		igd_readAndContinue "Please add necessary \"deb-src\" line(s) to your sources.list (and run an update)."
 		exit 1
 	fi
 }
@@ -77,7 +76,7 @@ igd_selectBranch()
 	local branch="gaps"
 	local alternative="gaps-next"
 
-	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise)"; then
+	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise [recommended])"; then
 		branch=${alternative}
 	fi
 
@@ -153,7 +152,7 @@ igd_cleanUp()
 
 igd_configHint()
 {
-	igd_readAndContinue "Add the following lines to your i3 config and restart..."
+	igd_readAndContinue "Append the following lines to your i3 config and restart..."
 	cat <<EOF > /dev/stdout
 ### i3-gaps stuff ###
 
