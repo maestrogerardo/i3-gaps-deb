@@ -7,6 +7,7 @@ igd_BASEDIR="$(pwd)"
 igd_GITDIR="${igd_BASEDIR}/i3-gaps"
 igd_GITURL="https://www.github.com/Airblader/i3"
 igd_TIMESTAMP=i"$(date +%Y%m%d%H%M%S)"
+igd_JESSIE=-1
 
 # Functions
 
@@ -22,7 +23,7 @@ igd_question()
 	local result=1 # false
 	local question="${1}"
 
-	tput setaf 3; printf "\n[igd] "; tput sgr0
+	tput setaf 3; printf "[igd] "; tput sgr0
 	tput setaf 7; printf "${question}"; tput sgr0
 	printf " (y/N): "
 	read answer
@@ -36,9 +37,16 @@ igd_question()
 igd_readAndContinue()
 {
 	local msg="${1}"
-	tput setaf 3; printf "\n[igd] "; tput sgr0
+	tput setaf 3; printf "[igd] "; tput sgr0
 	tput setaf 7; printf "${msg}"; tput sgr0
 	read -p " [RETURN]"
+}
+
+igd_startupHint()
+{
+	igd_readAndContinue "This tool creates (and optionally installs) Debian packages for i3-gaps..."
+	igd_readAndContinue "This tool comes with now warranty and in the hope to be usefull..."
+	igd_readAndContinue "This tool assumes that you've i3 installed already..."
 }
 
 igd_checkSourcesList()
@@ -51,11 +59,63 @@ igd_checkSourcesList()
 	fi
 }
 
+igd_detectDebianJessie()
+{
+	if grep --quiet ^8 /etc/debian_version; then
+		igd_log "Debian jessie detected."
+		igd_JESSIE=0
+	else
+		igd_JESSIE=1
+		igd_log "Debian version != jessie, ignoring special treatment(s)..."
+	fi
+}
+
+igd_isJessie()
+{
+	if [ ${igd_JESSIE} -eq -1 ]; then
+		igd_detectDebianJessie
+	fi
+
+	return ${igd_JESSIE}
+}
+
+igd_ensurePotentialJessieBackportsAvailability()
+{
+	igd_log "Checking sources.lists* to contain jessie-backports (\"weak\")..."
+
+	if ! grep --quiet -r "deb-src.*-backports" /etc/apt/sources.list*; then
+		igd_readAndContinue "Please add \"jessie-backport sources\" to your sources.list (and run an update)."
+		igd_log "You can use the following lines to achieve that:"
+		cat <<EOF
+deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free
+deb-src http://ftp.debian.org/debian/ jessie-backports main contrib non-free
+EOF
+		exit 3
+	else
+		igd_log "Backport sources available..."
+	fi
+}
+
+igd_handleJessieBackportsSpecialCase()
+{
+	if igd_isJessie; then
+		igd_ensurePotentialJessieBackportsAvailability
+	else
+		igd_log "Debian version != jessie, ignoring special backports treatment..."
+	fi
+}
+
 igd_installBuildDeps()
 {
 	igd_log "Installing build dependencies..."
 	sudo apt-get build-dep i3-wm
-	sudo apt-get install devscripts dpkg-dev dh-autoreconf
+	sudo apt-get install \
+		devscripts dpkg-dev \
+		dh-autoreconf \
+		libxcb-xrm-dev \
+		libxcb-xkb-dev \
+		libxkbcommon-dev \
+		libxkbcommon-x11-dev
 }
 
 igd_selectBranch()
@@ -96,7 +156,7 @@ igd_switchToGitDir()
 
 igd_updateDebianChangelog()
 {
-	igd_log "Umpdating Debian changelog..."
+	igd_log "Updating Debian changelog..."
 	DEBEMAIL="g-a-d@web.de" \
 	DEBFULLNAME="Gerardo" \
 	debchange --preserve --dist=unstable --local=gerardo+${igd_TIMESTAMP} "New upstream."
@@ -129,15 +189,38 @@ igd_installDebianPackages()
 	fi
 }
 
-igd_handleJessieSpecialCase()
+igd_ensurePotentialJessieBackportsAvailability()
 {
-	if grep --quiet ^8 /etc/debian_version; then
-		igd_readAndContinue "Debian jessie detected. Correcting dependency stuff..."
+	igd_log "Checking sources.lists* to contain jessie-backports (\"weak\")..."
+
+	if ! grep --quiet -r "deb-src.*-backports" /etc/apt/sources.list*; then
+		igd_readAndContinue "Please add \"jessie-backport sources\" to your sources.list (and run an update)."
+		igd_log "You can use the following lines to achieve that:"
+		cat <<EOF
+deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free
+deb-src http://ftp.debian.org/debian/ jessie-backports main contrib non-free
+EOF
+		exit 3
+	else
+		igd_log "Backport sources available..."
+	fi
+}
+
+
+igd_ensurePotentialJessieDependencyStuff()
+{
+		igd_readAndContinue "Correcting dependency stuff..."
 
 		local f1="${igd_GITDIR}/debian/control"
 		local f2="${igd_GITDIR}/configure.ac"
-		sed -i 's/libcairo2-dev (>= 1\.14\.4)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
-		sed -i 's/cairo >= 1\.14\.4/cairo >= 1\.14\.0/g' ${f2}
+		sed -i 's/libcairo2-dev (>= 1\.14\.[0-9]*)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
+		sed -i 's/cairo >= 1\.14\.[0-9]*/cairo >= 1\.14\.0/g' ${f2}
+}
+
+igd_handleJessieDependencySpecialCase()
+{
+	if igd_isJessie; then
+		igd_ensurePotentialJessieDependencyStuff
 	else
 		igd_log "Debian version != jessie, ignoring special treatment..."
 	fi
@@ -222,7 +305,10 @@ main()
 		exit 23
 	fi
 
+	igd_startupHint
 	igd_checkSourcesList
+	igd_detectDebianJessie
+	igd_handleJessieBackportsSpecialCase
 	igd_installBuildDeps
 	igd_clone
 	igd_switchToGitDir
@@ -230,7 +316,7 @@ main()
 	igd_selectBranch
 	igd_updateDebianChangelog
 	igd_fixRules
-	igd_handleJessieSpecialCase
+	igd_handleJessieDependencySpecialCase
 	igd_buildDebianPackage
 	igd_installDebianPackages
 	igd_cleanUp
