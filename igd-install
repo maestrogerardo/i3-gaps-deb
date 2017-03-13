@@ -82,7 +82,7 @@ igd_detectDebianJessie()
 		igd_JESSIE=0
 	else
 		igd_JESSIE=1
-		igd_log "Debian version != jessie, ignoring special treatment(s)..."
+		igd_log "Debian version != jessie, ignoring special treatment..."
 	fi
 }
 
@@ -116,8 +116,6 @@ igd_handleJessieBackportsSpecialCase()
 {
 	if igd_isJessie; then
 		igd_ensurePotentialJessieBackportsAvailability
-	else
-		igd_log "Debian version != jessie, ignoring special backports treatment..."
 	fi
 }
 
@@ -237,8 +235,6 @@ igd_handleJessieDependencySpecialCase()
 {
 	if igd_isJessie; then
 		igd_ensurePotentialJessieDependencyStuff
-	else
-		igd_log "Debian version != jessie, ignoring special treatment..."
 	fi
 }
 
