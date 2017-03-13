@@ -103,8 +103,8 @@ igd_ensurePotentialJessieBackportsAvailability()
 		igd_readAndContinue "Please add \"jessie-backport sources\" to your sources.list (and run an update)."
 		igd_log "You can use the following lines to achieve that:"
 		cat <<EOF
-deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free
-deb-src http://ftp.debian.org/debian/ jessie-backports main contrib non-free
+deb http://ftp.debian.org/debian/ jessie-backports main
+deb-src http://ftp.debian.org/debian/ jessie-backports main
 EOF
 		exit 3
 	else
