@@ -69,7 +69,7 @@ igd_installBuildDeps()
 {
 	igd_log "Installing build dependencies..."
 	sudo apt-get build-dep i3-wm
-	sudo apt-get install devscripts dpkg-dev
+	sudo apt-get install devscripts dpkg-dev dh-autoreconf
 }
 
 igd_selectBranch()
