@@ -244,7 +244,6 @@ igd_handleJessieDependencySpecialCase()
 
 igd_cleanUp()
 {
-	pwd
 	if igd_question "Remove created files?"; then
 		rm -v ../*${igd_TIMESTAMP}*
 	fi
