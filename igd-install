@@ -221,10 +221,10 @@ main()
 		exit 23
 	fi
 
-	igd_handleJessieSpecialCase
 	igd_checkSourcesList
 	igd_installBuildDeps
 	igd_clone
+	igd_handleJessieSpecialCase
 	igd_switchToGitDir
 	igd_prepareGitStuff
 	igd_selectBranch
