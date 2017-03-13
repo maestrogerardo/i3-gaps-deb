@@ -225,12 +225,12 @@ main()
 	igd_checkSourcesList
 	igd_installBuildDeps
 	igd_clone
-	igd_handleJessieSpecialCase
 	igd_switchToGitDir
 	igd_prepareGitStuff
 	igd_selectBranch
 	igd_updateDebianChangelog
 	igd_fixRules
+	igd_handleJessieSpecialCase
 	igd_buildDebianPackage
 	igd_installDebianPackages
 	igd_cleanUp
