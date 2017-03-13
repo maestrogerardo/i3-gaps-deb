@@ -155,33 +155,39 @@ igd_configHint()
 {
 	igd_readAndContinue "Add the following lines to your i3 config and restart..."
 	cat <<EOF > /dev/stdout
-#### i3-gaps stuff ####
+### i3-gaps stuff ###
 
 # Necessary for i3-gaps to work properly (pixel can be any value)
 for_window [class="^.*"] border pixel 3
+
+# Smart Gaps
+smart_gaps on
+
+# Smart Borders
+smart_borders on
 
 # Some color adjustments
 client.focused_inactive #000000 #000000 #000000 #000000 #000000
 client.unfocused        #000000 #000000 #000000 #000000 #000000
 
-
 # Set inner/outer gaps
 gaps inner 12
 gaps outer -2
 
-set $mode_gaps Gaps: (o) outer, (i) inner
-set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
-set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym $mod+Shift+g mode "$mode_gaps"
+# Gaps mode
+set \$mode_gaps Gaps: (o) outer, (i) inner
+set \$mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set \$mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym \$mod+Shift+g mode "\$mode_gaps"
 
-mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
+mode "\$mode_gaps" {
+        bindsym o      mode "\$mode_gaps_outer"
+        bindsym i      mode "\$mode_gaps_innter"
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
 
-mode "$mode_gaps_inner" {
+mode "\$mode_gaps_inner" {
         bindsym plus  gaps inner current plus 5
         bindsym minus gaps inner current minus 5
         bindsym 0     gaps inner current set 0
@@ -194,7 +200,7 @@ mode "$mode_gaps_inner" {
         bindsym Escape mode "default"
 }
 
-mode "$mode_gaps_outer" {
+mode "\$mode_gaps_outer" {
         bindsym plus  gaps outer current plus 5
         bindsym minus gaps outer current minus 5
         bindsym 0     gaps outer current set 0
@@ -206,12 +212,6 @@ mode "$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-
-### Smart Gaps
-smart_gaps on
-
-### Smart Borders
-smart_borders on
 EOF
 }
 
