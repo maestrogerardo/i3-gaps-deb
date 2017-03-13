@@ -131,7 +131,7 @@ EOF
 igd_buildDebianPackage()
 {
 	igd_log "Build Debian package..."
-	dpkg-buildpackage --unsigned-source --unsigned-changes
+	dpkg-buildpackage -us -uc
 }
 
 igd_installDebianPackages()
