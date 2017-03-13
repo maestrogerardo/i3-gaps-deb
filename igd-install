@@ -17,7 +17,6 @@ igd_log()
 	tput setaf 7; printf "${msg}\n" >&2; tput sgr0
 }
 
-
 igd_question()
 {
 	local result=1 # false
@@ -40,6 +39,20 @@ igd_readAndContinue()
 	tput setaf 3; printf "\n[igd] "; tput sgr0
 	tput setaf 7; printf "${msg}"; tput sgr0
 	read -p " [RETURN]"
+}
+
+igd_handleJessieSpecialCase()
+{
+	if grep --quiet ^8 /etc/debian_version; then
+		igd_readAndContinue "Debian jessie detected. Correcting dependency stuff..."
+
+		local f1="${igd_GITDIR}/debian/control"
+		local f2="${igd_GITDIR}/configure.ac"
+		sed -i 's/libcairo2-dev (>= 1\.14\.4)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
+		sed -i 's/cairo >= 1\.14\.4/cairo >= 1\.14\.0/g' ${f2}
+	else
+		igd_log "Debian version != jessie..."
+	fi
 }
 
 igd_checkSourcesList()
@@ -209,6 +222,7 @@ main()
 		exit 23
 	fi
 
+	igd_handleJessieSpecialCase
 	igd_checkSourcesList
 	igd_installBuildDeps
 	igd_clone
