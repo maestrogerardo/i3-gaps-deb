@@ -203,24 +203,6 @@ igd_installDebianPackages()
 	fi
 }
 
-igd_ensurePotentialJessieBackportsAvailability()
-{
-	igd_log "Checking sources.lists* to contain jessie-backports (\"weak\")..."
-
-	if ! grep --quiet -r "deb-src.*-backports" /etc/apt/sources.list*; then
-		igd_readAndContinue "Please add \"jessie-backport sources\" to your sources.list (and run an update)."
-		igd_log "You can use the following lines to achieve that:"
-		cat <<EOF
-deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free
-deb-src http://ftp.debian.org/debian/ jessie-backports main contrib non-free
-EOF
-		exit 3
-	else
-		igd_log "Backport sources available..."
-	fi
-}
-
-
 igd_ensurePotentialJessieDependencyStuff()
 {
 		igd_readAndContinue "Correcting dependency stuff..."
