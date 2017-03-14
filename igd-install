@@ -130,7 +130,7 @@ igd_handleJessieBackportsSpecialCase()
 
 igd_installBuildDeps()
 {
-	igd_log "Installing build dependencies..."
+	igd_readAndContinue "Installing build dependencies..."
 	sudo apt-get build-dep i3-wm
 	sudo apt-get install \
 		devscripts dpkg-dev \
