@@ -1,4 +1,4 @@
-# i3-gaps-debian
+# i3-gaps-deb
 Tool to create (and optionally install) Debian packages of _i3-gaps_.
 
 ## How does it work?
