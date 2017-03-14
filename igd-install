@@ -34,6 +34,14 @@ igd_log()
 	tput setaf 7; printf "${msg}\n" >&2; tput sgr0
 }
 
+igd_readAndContinue()
+{
+	local msg="${1}"
+	tput setaf 3; printf "[igd] "; tput sgr0
+	tput setaf 7; printf "${msg}"; tput sgr0
+	read -p " [RETURN]"
+}
+
 igd_question()
 {
 	local result=1 # false
@@ -78,14 +86,6 @@ igd_question()
 	fi
 
 	return ${result}
-}
-
-igd_readAndContinue()
-{
-	local msg="${1}"
-	tput setaf 3; printf "[igd] "; tput sgr0
-	tput setaf 7; printf "${msg}"; tput sgr0
-	read -p " [RETURN]"
 }
 
 igd_usage()
