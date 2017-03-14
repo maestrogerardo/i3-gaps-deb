@@ -62,14 +62,23 @@ igd_startupHint()
 {
 	igd_readAndContinue "This tool creates (and optionally installs) Debian packages of i3-gaps..."
 	igd_readAndContinue "This tool comes without any warranty and in the hope to be useful..."
-	igd_readAndContinue "This tool assumes that you have i3 already installed..."
+}
+
+igd_ensureI3ToBeInstalled()
+{
+	igd_log "Checking i3 installation..."
+
+	if ! dpkg -s i3 2> /dev/null; then
+		igd_readAndContinue "This tool assumes that you have \"i3\" already installed. Please do so..."
+		exit 42
+	fi
 }
 
 igd_checkSourcesList()
 {
 	igd_log "Checking sources.list(s) to contain sources (\"weak\")..."
 
-	if ! grep --quiet -r "^ *deb-src.*\(debian\)\|\(ubuntu\)[/ ].*main" /etc/apt/sources.list*; then
+	if ! grep --quiet -r "^ *deb-src.*\(\(debian\)\|\(ubuntu\)\)[/ ].*main" /etc/apt/sources.list*; then
 		igd_readAndContinue "Please add necessary \"deb-src\" line(s) to your sources.list (and run an update)."
 		exit 1
 	fi
@@ -299,6 +308,7 @@ main()
 	fi
 
 	igd_startupHint
+	igd_ensureI3ToBeInstalled
 	igd_checkSourcesList
 	igd_detectDebianJessie
 	igd_handleJessieBackportsSpecialCase
