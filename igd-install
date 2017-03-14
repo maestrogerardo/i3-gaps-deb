@@ -130,8 +130,9 @@ igd_handleJessieBackportsSpecialCase()
 
 igd_installBuildDeps()
 {
-	igd_readAndContinue "Installing build dependencies..."
+	igd_readAndContinue "Installing (basic) build dependencies..."
 	sudo apt-get build-dep i3-wm
+	igd_readAndContinue "Installing (additional) build dependencies..."
 	sudo apt-get install \
 		devscripts dpkg-dev \
 		dh-autoreconf \
