@@ -19,10 +19,11 @@
 # Namespace: igd
 
 # Variables
+
 igd_BASEDIR="$(pwd)"
 igd_GITDIR="${igd_BASEDIR}/i3-gaps"
 igd_GITURL="https://www.github.com/Airblader/i3"
-igd_TIMESTAMP=i"$(date +%Y%m%d%H%M%S)"
+igd_TIMESTAMP="$(date +%Y%m%d%H%M%S)"
 igd_JESSIE=-1
 
 # Functions
