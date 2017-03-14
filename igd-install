@@ -172,6 +172,19 @@ igd_installBuildDeps()
 		libxkbcommon-x11-dev
 }
 
+igd_ensureGitToBeInstalled()
+{
+	igd_log "Checking git installation..."
+
+	if ! dpkg -s git 2> /dev/null; then
+		if igd_question "This tool assumes that you have \"git\" already installed. Install now?" "y"; then
+			sudo apt-get install git
+		else
+			exit 44
+		fi
+	fi
+}
+
 igd_selectBranch()
 {
 	local branch="gaps"
@@ -344,6 +357,7 @@ main()
 	igd_detectDebianJessie
 	igd_handleJessieBackportsSpecialCase
 	igd_installBuildDeps
+	igd_ensureGitToBeInstalled
 	igd_clone
 	igd_switchToGitDir
 	igd_prepareGitStuff
