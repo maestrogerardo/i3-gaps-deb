@@ -178,31 +178,11 @@ igd_ensureGitToBeInstalled()
 
 	if ! dpkg -s git 2> /dev/null; then
 		if igd_question "This tool assumes that you have \"git\" already installed. Install now?" "y"; then
-			sudo apt-get install git
+			sudo  git
 		else
 			exit 44
 		fi
 	fi
-}
-
-igd_selectBranch()
-{
-	local branch="gaps"
-	local alternative="gaps-next"
-
-	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise [recommended])"; then
-		branch=${alternative}
-	fi
-
-	git checkout ${branch}
-}
-
-igd_prepareGitStuff()
-{
-	igd_log "Preparing git stuff..."
-	git reset --hard HEAD
-	git clean -fdx
-	git pull
 }
 
 igd_clone()
@@ -219,6 +199,26 @@ igd_switchToGitDir()
 {
 	igd_log "Entering directory ${igd_GITDIR}..."
 	cd ${igd_GITDIR}
+}
+
+igd_prepareGitStuff()
+{
+	igd_log "Preparing git stuff..."
+	git reset --hard HEAD
+	git clean -fdx
+	git pull
+}
+
+igd_selectBranch()
+{
+	local branch="gaps"
+	local alternative="gaps-next"
+
+	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise [recommended])"; then
+		branch=${alternative}
+	fi
+
+	git checkout ${branch}
 }
 
 igd_updateDebianChangelog()
