@@ -6,7 +6,7 @@ It uses the newest stuff from [here](https://github.com/Airblader/i3),
 makes some modifications (only if necessary for the _building step_)
 and finally produces common Debian packages.
 
-## Why does it exist?
+## What's the purpose?
 _i3-gaps_ simply does not exist in Debian (so far).
 
 ## Works for what?
