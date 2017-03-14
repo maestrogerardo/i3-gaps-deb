@@ -280,10 +280,9 @@ igd_cleanUp()
 	fi
 }
 
-igd_configHint()
+igd_printI3GapsConfig()
 {
-	igd_readAndContinue "Please append the following lines manually to your i3 config and restart..."
-	cat <<EOF > /dev/stdout
+	cat <<EOF
 ### i3-gaps stuff ###
 
 # Necessary for i3-gaps to work properly (pixel can be any value)
@@ -342,6 +341,12 @@ mode "\$mode_gaps_outer" {
         bindsym Escape mode "default"
 }
 EOF
+}
+
+igd_configHint()
+{
+	igd_readAndContinue "Please append the following lines manually to your i3 config and restart..."
+	igd_printI3GapsConfig
 }
 
 main()
