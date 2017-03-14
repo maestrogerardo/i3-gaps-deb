@@ -1,5 +1,5 @@
 # i3-gaps-deb
-Tool to create (and optionally install) Debian packages of _i3-gaps_.
+Tool to create Debian (or Ubuntu) packages of _i3-gaps_.
 
 ## How does it work?
 It uses the newest stuff from [here](https://github.com/Airblader/i3),
@@ -10,12 +10,13 @@ and finally produces common Debian packages.
 _i3-gaps_ simply does not exist in Debian (so far).
 
 ## Works for what?
-Debian _jessie_ and later.
+  - Debian "jessie" _and later_.
+  - Ubuntu "yakkety" _and later_.
 
 ## Credits
 Thanks to [stapelberg](https://github.com/stapelberg) for creating
 [i3](http://i3wm.org/) and [Airblader](https://github.com/Airblader)
-for the _gaps part_.  (Of course, also thanks to _anyone else_ contributing to _i3_.)
+for the _gaps part_.  (...and of course to _anyone else_ contributing to _i3_.)
 
 ## Beer
 Hey, I'm [thirsty](http://gunbomber.org/donation.html) like hell... _;-)_
