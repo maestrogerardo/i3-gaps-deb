@@ -38,13 +38,43 @@ igd_question()
 {
 	local result=1 # false
 	local question="${1}"
+	local default="n"
+
+	# ensure lowercase
+	if [ "${2}" = "y" ] || [ "${2}" = "Y" ]; then
+		default="y"
+	fi
 
 	tput setaf 3; printf "[igd] "; tput sgr0
 	tput setaf 7; printf "${question}"; tput sgr0
-	printf " (y/N): "
+
+	if [ ${default} = "y" ]; then
+		printf " (Y/n): "
+	else
+		printf " (y/N): "
+	fi
+
 	read answer
-	if [ "${answer}" = "y" ]; then
-		result=0
+
+	# ensure lowercase
+	if [ "${answer}" = "Y" ]; then
+		answer="y"
+	fi
+
+	if [ "${answer}" = "N" ]; then
+		answer="n"
+	fi
+
+	if [ ${default} = "y" ]; then
+		if [ "${answer}" != "n" ]; then
+			result=0 # true
+		fi
+	else
+		if [ "${answer}" != "y" ]; then
+			result=1 # false
+		else
+			result=0 # true
+		fi
 	fi
 
 	return ${result}
