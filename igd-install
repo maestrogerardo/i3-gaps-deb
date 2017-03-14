@@ -88,6 +88,26 @@ igd_readAndContinue()
 	read -p " [RETURN]"
 }
 
+igd_usage()
+{
+	printf "\nThis tool creates (and optionally installs) Debian packages of i3-gaps.\n\n"
+	printf "Usage: ${0} [OPTION...]\n\n"
+	printf "  -h, --help       show this help and quit\n\n"
+}
+
+igd_checkHelp()
+{
+	if [ ${#} -ge 1 ]; then
+		if [ ${1} = "-h" ] || [ ${1} = "--help" ]; then
+			igd_usage
+			exit 0
+		else
+			igd_usage
+			exit 23
+		fi
+	fi
+}
+
 igd_startupHint()
 {
 	igd_readAndContinue "This tool creates (and optionally installs) Debian packages of i3-gaps..."
@@ -351,11 +371,7 @@ igd_configHint()
 
 main()
 {
-	if [ ${#} -ne 0 ]; then
-		echo "Usage: ${0}"
-		exit 23
-	fi
-
+	igd_checkHelp ${@}
 	igd_startupHint
 	igd_ensureI3ToBeInstalled
 	igd_checkSourcesList
