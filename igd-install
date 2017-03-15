@@ -94,15 +94,18 @@ igd_usage()
 
 igd_checkHelp()
 {
-	[ ${#} -ge 1 ] && case ${1} in
-	-h|--help)
-		igd_usage
-		exit 0
-		;;
-	*)
-		igd_usage
-		exit 23
-	esac
+	if [ ${#} -ge 1 ]; then
+		case "${1}" in
+		"-h"|"--help")
+			igd_usage
+			exit 0
+			;;
+		*)
+			igd_usage
+			exit 23
+			;;
+		esac
+	fi
 }
 
 igd_startupHint()
