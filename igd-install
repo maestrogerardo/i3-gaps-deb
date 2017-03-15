@@ -264,7 +264,7 @@ EOF
 
 igd_buildDebianPackage()
 {
-	igd_log "Build Debian package..."
+	igd_readAndContinue "Build Debian package..."
 	dpkg-buildpackage -us -uc
 }
 
