@@ -261,9 +261,9 @@ override_dh_installman:
 EOF
 }
 
-igd_buildDebianPackage()
+igd_buildDebianPackages()
 {
-	igd_readAndContinue "Build Debian package..."
+	igd_readAndContinue "Build Debian packages..."
 	dpkg-buildpackage -us -uc
 }
 
@@ -392,7 +392,7 @@ main()
 	igd_updateDebianChangelog
 	igd_fixRules
 	igd_handleJessieDependencySpecialCase
-	igd_buildDebianPackage
+	igd_buildDebianPackages
 	igd_switchToBaseDir
 	igd_installDebianPackages
 	igd_cleanUp
