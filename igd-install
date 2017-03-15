@@ -245,8 +245,8 @@ igd_selectBranch()
 igd_updateDebianChangelog()
 {
 	igd_log "Updating Debian changelog..."
-	DEBEMAIL="g-a-d@web.de" \
-	DEBFULLNAME="Gerardo" \
+	DEBEMAIL="maestro.gerardo@gmail.com" \
+	DEBFULLNAME="Gerhard A. Dittes" \
 	debchange --preserve --dist=unstable --local=gerardo+${igd_TIMESTAMP} "New upstream."
 }
 
