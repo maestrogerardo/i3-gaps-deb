@@ -119,7 +119,7 @@ igd_ensureI3ToBeInstalled()
 {
 	igd_log "Checking i3 installation..."
 
-	if ! dpkg -s i3 2> /dev/null; then
+	if ! dpkg -s i3 &> /dev/null; then
 		igd_readAndContinue "This tool assumes that you have \"i3\" already installed. Please do so..."
 		exit 42
 	fi
@@ -197,7 +197,7 @@ igd_ensureGitToBeInstalled()
 {
 	igd_log "Checking git installation..."
 
-	if ! dpkg -s git 2> /dev/null; then
+	if ! dpkg -s git &> /dev/null; then
 		if igd_question "This tool assumes that you have \"git\" already installed. Install now?" "y"; then
 			sudo  git
 		else
