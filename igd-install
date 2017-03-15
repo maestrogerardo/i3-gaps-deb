@@ -50,7 +50,7 @@ igd_question()
 	local default="n"
 
 	# ensure lowercase
-	if [ "${2}" = "y" ] || [ "${2}" = "Y" ]; then
+	if [ ${#} -eq 2 ] && [ "${2}" = "y" -o "${2}" = "Y" ]; then
 		default="y"
 	fi
 
@@ -68,9 +68,7 @@ igd_question()
 	# ensure lowercase
 	if [ "${answer}" = "Y" ]; then
 		answer="y"
-	fi
-
-	if [ "${answer}" = "N" ]; then
+	elif [ "${answer}" = "N" ]; then
 		answer="n"
 	fi
 
@@ -79,9 +77,7 @@ igd_question()
 			result=0 # true
 		fi
 	else
-		if [ "${answer}" != "y" ]; then
-			result=1 # false
-		else
+		if [ "${answer}" = "y" ]; then
 			result=0 # true
 		fi
 	fi
