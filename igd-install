@@ -285,12 +285,12 @@ igd_installDebianPackages()
 
 igd_ensurePotentialJessieDependencyStuff()
 {
-		igd_readAndContinue "Correcting dependency stuff..."
+	igd_readAndContinue "Correcting dependency stuff..."
 
-		local f1="${igd_GITDIR}/debian/control"
-		local f2="${igd_GITDIR}/configure.ac"
-		sed -i 's/libcairo2-dev (>= 1\.14\.[0-9]*)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
-		sed -i 's/cairo >= 1\.14\.[0-9]*/cairo >= 1\.14\.0/g' ${f2}
+	local f1="${igd_GITDIR}/debian/control"
+	local f2="${igd_GITDIR}/configure.ac"
+	sed -i 's/libcairo2-dev (>= 1\.14\.[0-9]*)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
+	sed -i 's/cairo >= 1\.14\.[0-9]*/cairo >= 1\.14\.0/g' ${f2}
 }
 
 igd_handleJessieDependencySpecialCase()
