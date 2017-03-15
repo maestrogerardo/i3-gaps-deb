@@ -268,10 +268,16 @@ igd_buildDebianPackage()
 	dpkg-buildpackage -us -uc
 }
 
+igd_switchToBaseDir()
+{
+	igd_log "Entering directory ${igd_BASEDIR}..."
+	cd ${igd_BASEDIR}
+}
+
 igd_installDebianPackages()
 {
-	local debs=$(ls ../i3_*${igd_TIMESTAMP}*deb ../i3-wm_*${igd_TIMESTAMP}*deb)
-	echo; igd_log "Result: ${debs}"
+	local debs=$(echo i3_*${igd_TIMESTAMP}*deb i3-wm_*${igd_TIMESTAMP}*deb)
+	igd_log "Result: ${debs}"
 	if igd_question "Install created Debian packages?" "y"; then
 		sudo dpkg -i ${debs}
 	fi
@@ -297,7 +303,7 @@ igd_handleJessieDependencySpecialCase()
 igd_cleanUp()
 {
 	if igd_question "Remove created files?" "y"; then
-		rm -v ../*${igd_TIMESTAMP}*
+		rm -v *${igd_TIMESTAMP}*
 	fi
 }
 
@@ -388,6 +394,7 @@ main()
 	igd_fixRules
 	igd_handleJessieDependencySpecialCase
 	igd_buildDebianPackage
+	igd_switchToBaseDir
 	igd_installDebianPackages
 	igd_cleanUp
 	igd_configHint
