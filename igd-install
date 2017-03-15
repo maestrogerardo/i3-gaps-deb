@@ -141,8 +141,8 @@ igd_detectDebianJessie()
 		igd_log "Debian jessie detected."
 		igd_JESSIE=0
 	else
-		igd_JESSIE=1
 		igd_log "Debian version != jessie, ignoring special treatment..."
+		igd_JESSIE=1
 	fi
 }
 
