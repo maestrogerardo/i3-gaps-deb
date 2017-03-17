@@ -28,6 +28,29 @@ igd_JESSIE=-1
 
 # Functions
 
+igd_usage()
+{
+	printf "\nThis tool creates (and optionally installs) Debian packages of i3-gaps.\n\n"
+	printf "Usage: ${0} [OPTION...]\n\n"
+	printf "  -h, --help       show this help and quit\n\n"
+}
+
+igd_checkHelp()
+{
+	if [ ${#} -ge 1 ]; then
+		case "${1}" in
+		"-h"|"--help")
+			igd_usage
+			exit 0
+			;;
+		*)
+			igd_usage
+			exit 23
+			;;
+		esac
+	fi
+}
+
 igd_log()
 {
 	local msg="${1}"
@@ -83,29 +106,6 @@ igd_question()
 	fi
 
 	return ${result}
-}
-
-igd_usage()
-{
-	printf "\nThis tool creates (and optionally installs) Debian packages of i3-gaps.\n\n"
-	printf "Usage: ${0} [OPTION...]\n\n"
-	printf "  -h, --help       show this help and quit\n\n"
-}
-
-igd_checkHelp()
-{
-	if [ ${#} -ge 1 ]; then
-		case "${1}" in
-		"-h"|"--help")
-			igd_usage
-			exit 0
-			;;
-		*)
-			igd_usage
-			exit 23
-			;;
-		esac
-	fi
 }
 
 igd_startupHint()
