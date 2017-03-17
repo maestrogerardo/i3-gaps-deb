@@ -25,6 +25,7 @@ igd_GITDIR="${igd_BASEDIR}/i3-gaps"
 igd_GITURL="https://www.github.com/Airblader/i3"
 igd_TIMESTAMP="$(date +%Y%m%d%H%M%S)"
 igd_JESSIE=-1
+igd_CONFIGS=""
 
 # Functions
 
@@ -304,9 +305,23 @@ igd_cleanUp()
 	fi
 }
 
+igd_checkConfigs()
+{
+	igd_log "Check i3-config(s)..."
+
+	local configs="${HOME}/.i3/config ${HOME}/.config/i3/config"
+
+	for f in ${configs}; do
+		if [ -w ${f} ]; then
+			igd_CONFIGS+="${f} "
+		fi
+	done
+}
+
 igd_printI3GapsConfig()
 {
 	cat <<EOF
+
 ### i3-gaps stuff ###
 
 # Necessary for i3-gaps to work properly (pixel can be any value)
@@ -364,13 +379,25 @@ mode "\$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
 EOF
 }
 
 igd_configHint()
 {
-	igd_readAndContinue "Please append the following lines (yourself) to your i3-config and restart..."
+	igd_readAndContinue "Please append the following lines to your i3-config and restart..."
 	igd_printI3GapsConfig
+}
+
+igd_updatePotentialConfigs()
+{
+	if [ -n "${igd_CONFIGS}" ]; then
+		for f in ${igd_CONFIGS}; do
+			if igd_question "...or shall I do it for you (file: ${f})?" "y"; then
+				igd_printI3GapsConfig >> ${f}
+			fi
+		done
+	fi
 }
 
 main()
@@ -394,7 +421,9 @@ main()
 	igd_switchToBaseDir
 	igd_installDebianPackages
 	igd_cleanUp
+	igd_checkConfigs
 	igd_configHint
+	igd_updatePotentialConfigs
 }
 
 main ${@}
