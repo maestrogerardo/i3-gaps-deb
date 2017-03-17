@@ -166,8 +166,6 @@ deb http://ftp.debian.org/debian/ jessie-backports main
 deb-src http://ftp.debian.org/debian/ jessie-backports main
 EOF
 		exit 3
-	else
-		igd_log "Backport sources available..."
 	fi
 }
 
