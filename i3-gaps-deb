@@ -238,7 +238,7 @@ igd_selectBranch()
 	local branch="gaps"
 	local alternative="gaps-next"
 
-	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise [recommended])"; then
+	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise)"; then
 		branch=${alternative}
 	fi
 
