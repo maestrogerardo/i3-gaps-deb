@@ -237,7 +237,7 @@ igd_selectBranch()
 	local branch="gaps"
 	local alternative="gaps-next"
 
-	if igd_question "Use branch \"${alternative}\"? (\"${branch}\" otherwise)"; then
+	if ! igd_question "Use branch \"${branch}\"? (\"${alternative}\" otherwise)" "y"; then
 		branch=${alternative}
 	fi
 
@@ -390,7 +390,7 @@ igd_updatePotentialConfigs()
 	local configs="${HOME}/.i3/config ${HOME}/.config/i3/config"
 
 	for f in ${configs}; do
-		if [ -w ${f} ] && igd_question "Or shall I do it for you now (file: ${f})?" "y"; then
+		if [ -w ${f} ] && igd_question "Or shall I do it for you now (file: ${f})?"; then
 			igd_printI3GapsConfig >> ${f}
 		fi
 	done
