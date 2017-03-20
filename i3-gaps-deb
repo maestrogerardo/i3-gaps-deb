@@ -391,6 +391,7 @@ EOF
 igd_configHint()
 {
 	igd_readAndContinue "Please append the following lines to your i3-config and restart..."
+	igd_readAndContinue "You can print them at any time later using \"${0} --config\"..."
 	igd_printI3GapsConfig
 }
 
