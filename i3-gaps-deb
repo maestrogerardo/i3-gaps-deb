@@ -33,7 +33,8 @@ igd_usage()
 {
 	printf "\nThis tool creates (and optionally installs) Debian packages of i3-gaps.\n\n"
 	printf "Usage: ${0} [OPTION...]\n\n"
-	printf "  -h, --help       show this help and quit\n\n"
+	printf "  -h, --help       show this help and quit\n"
+	printf "      --config     print \"i3-gaps config\" recommendation\n\n"
 }
 
 igd_checkHelp()
@@ -42,6 +43,10 @@ igd_checkHelp()
 		case "${1}" in
 		"-h"|"--help")
 			igd_usage
+			exit 0
+			;;
+		"--config")
+			igd_printI3GapsConfig
 			exit 0
 			;;
 		*)
