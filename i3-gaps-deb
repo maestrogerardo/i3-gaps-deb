@@ -58,14 +58,14 @@ igd_checkHelp()
 
 igd_log()
 {
-	local msg="${1}"
+	local msg="${@}"
 	tput setaf 3; printf "[igd] " >&2; tput sgr0
 	tput setaf 7; printf "${msg}\n" >&2; tput sgr0
 }
 
 igd_readAndContinue()
 {
-	local msg="${1}"
+	local msg="${@}"
 	tput setaf 3; printf "[igd] "; tput sgr0
 	tput setaf 7; printf "${msg}"; tput sgr0
 	read -p " [RETURN]"
