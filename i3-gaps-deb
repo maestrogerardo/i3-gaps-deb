@@ -224,15 +224,14 @@ igd_switchToGitDir()
 	cd ${igd_GITDIR}
 }
 
-igd_prepareGitStuff()
+igd_cleanUpGitStuff()
 {
-	igd_log "Preparing git stuff..."
+	igd_log "Cleaning up..."
 	git reset --hard HEAD
 	git clean -fdx
-	git pull
 }
 
-igd_selectBranch()
+igd_prepareBranch()
 {
 	local branch="gaps"
 	local alternative="gaps-next"
@@ -242,6 +241,7 @@ igd_selectBranch()
 	fi
 
 	git checkout ${branch}
+	git pull
 }
 
 igd_updateDebianChangelog()
@@ -408,8 +408,8 @@ main()
 	igd_ensureGitToBeInstalled
 	igd_clone
 	igd_switchToGitDir
-	igd_prepareGitStuff
-	igd_selectBranch
+	igd_cleanUpGitStuff
+	igd_prepareBranch
 	igd_updateDebianChangelog
 	igd_fixRules
 	igd_handleJessieDependencySpecialCase
