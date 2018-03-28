@@ -324,10 +324,6 @@ smart_gaps on
 # Smart Borders
 smart_borders on
 
-# Some color adjustments
-client.focused_inactive #000000 #000000 #000000 #000000 #000000
-client.unfocused        #000000 #000000 #000000 #000000 #000000
-
 # Set inner/outer gaps
 gaps inner 12
 gaps outer -2
