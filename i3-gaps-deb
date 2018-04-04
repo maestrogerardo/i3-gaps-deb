@@ -184,7 +184,7 @@ igd_handleJessieBackportsSpecialCase()
 igd_installBuildDeps()
 {
 	igd_readAndContinue "Installing (basic) build dependencies..."
-	sudo apt -y build-dep i3-wm
+	sudo apt-get -y build-dep i3-wm
 	igd_readAndContinue "Installing (additional) build dependencies..."
 	sudo apt -y install \
 		devscripts dpkg-dev \
