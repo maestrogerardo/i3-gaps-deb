@@ -184,9 +184,14 @@ igd_handleJessieBackportsSpecialCase()
 igd_installBuildDeps()
 {
 	igd_readAndContinue "Installing (basic) build dependencies..."
-	sudo apt-get build-dep i3-wm
+	if igd_isJessie; then
+		sudo apt-get -y build-dep i3-wm
+	else
+		sudo apt -y build-dep i3-wm
+	fi
+
 	igd_readAndContinue "Installing (additional) build dependencies..."
-	sudo apt-get install \
+	sudo apt -y install \
 		devscripts dpkg-dev \
 		dh-autoreconf \
 		libxcb-xrm-dev \
@@ -201,7 +206,7 @@ igd_ensureGitToBeInstalled()
 
 	if ! dpkg -s git &> /dev/null; then
 		if igd_question "This tool assumes that you have \"git\" already installed. Install now?" "y"; then
-			sudo apt-get install git
+			sudo apt-get -y install git
 		else
 			exit 44
 		fi
