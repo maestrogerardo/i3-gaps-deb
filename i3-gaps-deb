@@ -253,8 +253,10 @@ igd_updateDebianChangelog()
 {
 	igd_log "Updating Debian changelog..."
 
+	local version="$(grep -o "\w*[0-9\.]\w*" I3_VERSION)-1gerardo+${igd_TIMESTAMP}"
+
 	DEBEMAIL="maestro.gerardo@gmail.com" DEBFULLNAME="Gerhard A. Dittes" \
-		debchange --preserve --dist=unstable --local=gerardo+${igd_TIMESTAMP} "New upstream."
+		debchange --preserve --dist=unstable --newversion="${version}" "New upstream."
 }
 
 igd_fixRules()
