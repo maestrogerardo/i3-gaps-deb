@@ -253,10 +253,17 @@ igd_updateDebianChangelog()
 {
 	igd_log "Updating Debian changelog..."
 
-	local version="$(grep -o "\w*[0-9\.]\w*" I3_VERSION)-1gerardo+${igd_TIMESTAMP}"
+	local versionFoo="$(head -1 debian/changelog | cut -d'(' -f2 | cut -d'-' -f1 || echo "0.0.0")"
+	local versionBar="$(grep -o "\w*[0-9\.]\w*" I3_VERSION || echo "0.0.0")"
+
+	local version="${versionFoo}"
+	if dpkg --compare-versions "${versionFoo}" lt "${versionBar}"; then version="${versionBar}"; fi
+
+	local newVersion="${version}-1gerardo+${igd_TIMESTAMP}"
+	igd_log "Version detected: \"${versionFoo}\" VS \"${versionBar}\" ~> \"${newVersion}\""
 
 	DEBEMAIL="maestro.gerardo@gmail.com" DEBFULLNAME="Gerhard A. Dittes" \
-		debchange --preserve --dist=unstable --newversion="${version}" "New upstream."
+		debchange --dist=unstable --newversion="${newVersion}" "New upstream."
 }
 
 igd_fixRules()
