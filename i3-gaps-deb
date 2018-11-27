@@ -332,8 +332,8 @@ smart_gaps on
 smart_borders on
 
 # Set inner/outer gaps
-gaps inner 12
-gaps outer -2
+gaps inner 14
+gaps outer 0
 
 # Gaps mode
 set \$mode_gaps Gaps: (o) outer, (i) inner
