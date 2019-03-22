@@ -275,6 +275,9 @@ igd_updateDebianChangelog()
 
 igd_fixRules()
 {
+	igd_log "Disable sanitizers..."
+	patch --forward -r - -p1 <${igd_BASEDIR}/0001-debian-Disable-sanitizers.patch || igd_log "Already patched."
+
 	igd_log "Fix rules file..."
 	cat <<EOF >>debian/rules
 

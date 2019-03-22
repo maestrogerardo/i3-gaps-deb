@@ -1,0 +1,25 @@
+From f6ecd304149aad96c0a2fe417e392a395043cfb5 Mon Sep 17 00:00:00 2001
+From: Joseph Benden <joe@benden.us>
+Date: Fri, 22 Mar 2019 09:08:07 -0700
+Subject: [PATCH] debian: Disable sanitizers.
+
+---
+ debian/rules | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/debian/rules b/debian/rules
+index d5c3068..11918d5 100755
+--- a/debian/rules
++++ b/debian/rules
+@@ -15,7 +15,7 @@ override_dh_auto_test:
+ 
+ override_dh_auto_configure:
+ 	# The default is /usr/share/doc/i3
+-	dh_auto_configure -- --docdir=/usr/share/doc/i3-wm
++	dh_auto_configure -- --docdir=/usr/share/doc/i3-wm --disable-sanitizers
+ 
+ override_dh_builddeb:
+ 	# bintray does not support xz currently.
+-- 
+2.7.4
+
