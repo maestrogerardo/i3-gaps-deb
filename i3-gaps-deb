@@ -206,7 +206,8 @@ igd_installBuildDeps()
 		libxcb-xrm-dev \
 		libxcb-xkb-dev \
 		libxkbcommon-dev \
-		libxkbcommon-x11-dev
+		libxkbcommon-x11-dev \
+        libxcb-shape0-dev
 }
 
 igd_ensureGitToBeInstalled()
