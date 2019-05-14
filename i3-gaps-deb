@@ -22,6 +22,7 @@
 
 igd_BASEDIR="$(pwd)"
 igd_GITDIR="${igd_BASEDIR}/i3-gaps"
+igd_PATCHDIR="${igd_BASEDIR}/patches"
 igd_GITURL="https://www.github.com/Airblader/i3"
 igd_BRANCH_DEFAULT="gaps"
 igd_BRANCH_ALTERNATIVE="gaps-next"
@@ -276,7 +277,7 @@ igd_updateDebianChangelog()
 igd_fixRules()
 {
 	igd_log "Disable sanitizers..."
-	patch --forward -r - -p1 <${igd_BASEDIR}/0001-debian-Disable-sanitizers.patch || igd_log "Already patched."
+	patch --forward -r - -p1 <${igd_PATCHDIR}/0001-debian-Disable-sanitizers.patch || igd_log "Already patched."
 
 	igd_log "Fix rules file..."
 	cat <<EOF >>debian/rules
