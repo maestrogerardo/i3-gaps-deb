@@ -134,8 +134,11 @@ igd_ensureI3ToBeInstalled()
 	igd_log "Checking i3 installation..."
 
 	if ! dpkg -s i3 &> /dev/null; then
-		igd_readAndContinue "This tool assumes that you have \"i3\" already installed. Please do so..."
-		exit 42
+		if igd_question "i3 not found, install it using apt?" "y"; then
+			sudo apt-get -y install i3
+		else
+			exit 42
+		fi
 	fi
 }
 
