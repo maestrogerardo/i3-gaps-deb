@@ -208,7 +208,8 @@ igd_installBuildDeps()
 		libxcb-xkb-dev \
 		libxkbcommon-dev \
 		libxkbcommon-x11-dev \
-        libxcb-shape0-dev
+		libxcb-shape0-dev \
+		meson
 }
 
 igd_ensureGitToBeInstalled()
