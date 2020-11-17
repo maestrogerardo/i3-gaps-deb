@@ -167,7 +167,7 @@ igd_ensureGitToBeInstalled()
 	igd_log "Checking git installation..."
 
 	if ! dpkg -s git &> /dev/null; then
-		if igd_question "This tool assumes that you have \"git\" already installed. Install now?" "y"; then
+		if igd_question "git not found, install it using apt?" "y"; then
 			sudo apt -y install git
 		else
 			exit 44
