@@ -14,9 +14,9 @@ index d5c3068..11918d5 100755
 @@ -15,7 +15,7 @@ override_dh_auto_test:
  
  override_dh_auto_configure:
- 	# The default is /usr/share/doc/i3
--	dh_auto_configure -- --docdir=/usr/share/doc/i3-wm
-+	dh_auto_configure -- --docdir=/usr/share/doc/i3-wm --disable-sanitizers
+ 	# Set -Ddocdir; the default is /usr/share/doc/i3
+-	dh_auto_configure -- -Ddocdir=/usr/share/doc/i3-wm -Dmans=true
++	dh_auto_configure -- -Ddocdir=/usr/share/doc/i3-wm -Dmans=true --buildtype=release -Db_sanitize=none
  
  override_dh_builddeb:
  	# bintray does not support xz currently.
