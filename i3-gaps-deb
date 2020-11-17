@@ -38,7 +38,6 @@ igd_usage()
 	printf "Usage: ${0} [OPTION...]\n\n"
 	printf "  -h, --help         show this help and quit\n"
 	printf "      --config       print \"i3-gaps config\" recommendation\n"
-	printf "      --config-next  print \"i3-gaps config\" recommendation (\"${igd_BRANCH_ALTERNATIVE}\" branch)\n\n"
 }
 
 igd_checkHelp()
@@ -50,11 +49,6 @@ igd_checkHelp()
 			exit 0
 			;;
 		"--config")
-			igd_printI3GapsConfig
-			exit 0
-			;;
-		"--config-next")
-			igd_BRANCH="${igd_BRANCH_ALTERNATIVE}"
 			igd_printI3GapsConfig
 			exit 0
 			;;
@@ -355,51 +349,6 @@ gaps inner 14
 gaps outer 0
 
 # Gaps mode
-EOF
-
-	if [ "${igd_BRANCH}" = "${igd_BRANCH_DEFAULT}" ]; then
-		cat <<EOF
-set \$mode_gaps Gaps: (o) outer, (i) inner
-set \$mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
-set \$mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym \$mod+Shift+g mode "\$mode_gaps"
-
-mode "\$mode_gaps" {
-        bindsym o      mode "\$mode_gaps_outer"
-        bindsym i      mode "\$mode_gaps_inner"
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-mode "\$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
-        bindsym minus gaps inner current minus 5
-        bindsym 0     gaps inner current set 0
-
-        bindsym Shift+plus  gaps inner all plus 5
-        bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     gaps inner all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-mode "\$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
-        bindsym minus gaps outer current minus 5
-        bindsym 0     gaps outer current set 0
-
-        bindsym Shift+plus  gaps outer all plus 5
-        bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     gaps outer all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-EOF
-	else
-		cat <<EOF
 set \$mode_gaps Gaps: (o)uter, (i)nner, (h)orizontal, (v)ertical, (t)op, (r)ight, (b)ottom, (l)eft
 set \$mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set \$mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
@@ -520,22 +469,18 @@ mode "\$mode_gaps_left" {
         bindsym Return mode "\$mode_gaps"
         bindsym Escape mode "default"
 }
-
 EOF
-	fi
 }
 
 igd_configHintPart1()
 {
-	igd_readAndContinue "Please append the following lines to your i3-config and restart..."
+	igd_readAndContinue "Please append the following lines to your (existing) i3-config and restart..."
 	igd_printI3GapsConfig
 }
 
 igd_configHintPart2()
 {
-	local option="$(if [ "${igd_BRANCH}" == "${igd_BRANCH_DEFAULT}" ]; then echo "--config"; else echo "--config-next"; fi)"
-
-	igd_readAndContinue "...you can print them at any time later using \"${0} ${option}\"..."
+	igd_readAndContinue "...you can print them at any time later using \"${0} --config\"..."
 }
 
 igd_updatePotentialConfigs()
