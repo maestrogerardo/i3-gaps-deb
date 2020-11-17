@@ -211,12 +211,6 @@ igd_installBuildDeps()
         libxcb-shape0-dev
 }
 
-igd_installBuildDepsNext()
-{
-	igd_log "Installing (i3-gaps-next) build dependencies..."
-  sudo apt-get -y install meson
-}
-
 igd_ensureGitToBeInstalled()
 {
 	igd_log "Checking git installation..."
@@ -293,12 +287,6 @@ override_dh_installdocs:
 override_dh_installman:
 	dh_install -O--parallel
 EOF
-}
-
-igd_fixDocs()
-{
-	igd_log "Enable doc building..."
-  patch --forward -r - -p0 <${igd_PATCHDIR}/0002-debian-Enable-Meson-Docs.patch || igd_log "Already patched."
 }
 
 igd_buildDebianPackages()
@@ -569,7 +557,6 @@ main()
 	igd_detectDebianJessie
 	igd_handleJessieBackportsSpecialCase
 	igd_installBuildDeps
-	[[ $igd_BRANCH =~ "next" ]] && igd_installBuildDepsNext
 	igd_ensureGitToBeInstalled
 	igd_clone
 	igd_switchToGitDir
@@ -577,7 +564,6 @@ main()
 	igd_prepareBranch
 	igd_updateDebianChangelog
 	igd_fixRules
-	[[ $igd_BRANCH =~ "next" ]] && igd_fixDocs
 	igd_handleJessieDependencySpecialCase
 	igd_buildDebianPackages
 	igd_switchToBaseDir
