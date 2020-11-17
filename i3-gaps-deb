@@ -128,7 +128,7 @@ igd_ensureI3ToBeInstalled()
 
 	if ! dpkg -s i3 &> /dev/null; then
 		if igd_question "i3 not found, install it using apt?" "y"; then
-			sudo apt-get -y install i3
+			sudo apt -y install i3
 		else
 			exit 42
 		fi
@@ -168,7 +168,7 @@ igd_ensureGitToBeInstalled()
 
 	if ! dpkg -s git &> /dev/null; then
 		if igd_question "This tool assumes that you have \"git\" already installed. Install now?" "y"; then
-			sudo apt-get -y install git
+			sudo apt -y install git
 		else
 			exit 44
 		fi
