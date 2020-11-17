@@ -28,7 +28,6 @@ igd_BRANCH_DEFAULT="gaps"
 igd_BRANCH_ALTERNATIVE="gaps-next"
 igd_BRANCH="${igd_BRANCH_DEFAULT}"
 igd_TIMESTAMP="$(date +%Y%m%d%H%M%S)"
-igd_JESSIE=-1
 
 # Functions
 
@@ -146,56 +145,10 @@ igd_checkSourcesList()
 	fi
 }
 
-igd_detectDebianJessie()
-{
-	if grep --quiet ^8 /etc/debian_version; then
-		igd_log "Debian jessie detected."
-		igd_JESSIE=0
-	else
-		igd_log "Debian version != jessie, ignoring special treatment..."
-		igd_JESSIE=1
-	fi
-}
-
-igd_isJessie()
-{
-	if [ ${igd_JESSIE} -eq -1 ]; then
-		igd_detectDebianJessie
-	fi
-
-	return ${igd_JESSIE}
-}
-
-igd_ensurePotentialJessieBackportsAvailability()
-{
-	igd_log "Checking sources.list(s) to contain jessie-backports (\"weak\")..."
-
-	if ! grep --quiet -r "^ *deb-src.*-backports" /etc/apt/sources.list*; then
-		igd_readAndContinue "Please add \"jessie-backport sources\" to your sources.list (and run an update)."
-		igd_log "You can use the following lines to achieve that:"
-		cat <<EOF
-deb http://ftp.debian.org/debian/ jessie-backports main
-deb-src http://ftp.debian.org/debian/ jessie-backports main
-EOF
-		exit 3
-	fi
-}
-
-igd_handleJessieBackportsSpecialCase()
-{
-	if igd_isJessie; then
-		igd_ensurePotentialJessieBackportsAvailability
-	fi
-}
-
 igd_installBuildDeps()
 {
 	igd_readAndContinue "Installing (basic) build dependencies..."
-	if igd_isJessie; then
-		sudo apt-get -y build-dep i3-wm
-	else
-		sudo apt -y build-dep i3-wm
-	fi
+	sudo apt -y build-dep i3-wm
 
 	igd_readAndContinue "Installing (additional) build dependencies..."
 	sudo apt -y install \
@@ -305,23 +258,6 @@ igd_installDebianPackages()
 	igd_log "Result: ${debs}"
 	if igd_question "Install created Debian packages?" "y"; then
 		sudo dpkg -i ${debs}
-	fi
-}
-
-igd_ensurePotentialJessieDependencyStuff()
-{
-	igd_readAndContinue "Correcting dependency stuff..."
-
-	local f1="${igd_GITDIR}/debian/control"
-	local f2="${igd_GITDIR}/configure.ac"
-	sed -i 's/libcairo2-dev (>= 1\.14\.[0-9]*)/libcairo2-dev (>= 1\.14\.0)/g' ${f1}
-	sed -i 's/cairo >= 1\.14\.[0-9]*/cairo >= 1\.14\.0/g' ${f2}
-}
-
-igd_handleJessieDependencySpecialCase()
-{
-	if igd_isJessie; then
-		igd_ensurePotentialJessieDependencyStuff
 	fi
 }
 
@@ -503,8 +439,6 @@ main()
 	igd_startupHint
 	igd_ensureI3ToBeInstalled
 	igd_checkSourcesList
-	igd_detectDebianJessie
-	igd_handleJessieBackportsSpecialCase
 	igd_installBuildDeps
 	igd_ensureGitToBeInstalled
 	igd_clone
@@ -513,7 +447,6 @@ main()
 	igd_prepareBranch
 	igd_updateDebianChangelog
 	igd_fixRules
-	igd_handleJessieDependencySpecialCase
 	igd_buildDebianPackages
 	igd_switchToBaseDir
 	igd_installDebianPackages
