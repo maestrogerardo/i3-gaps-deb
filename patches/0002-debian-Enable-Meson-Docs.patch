@@ -1,0 +1,14 @@
+--- meson_options.txt.orig	2020-09-11 15:12:20.199710861 +0900
++++ meson_options.txt	2020-09-11 15:12:31.871799810 +0900
+@@ -1,9 +1,9 @@
+ # -*- mode: meson -*-
+ 
+-option('docs', type: 'boolean', value: false,
++option('docs', type: 'boolean', value: true,
+        description: 'Build documentation from source (release tarballs contain a generated copy)')
+ 
+-option('mans', type: 'boolean', value: false,
++option('mans', type: 'boolean', value: true,
+        description: 'Build manpages from source (release tarballs contain a generated copy)')
+ 
+ option('docdir', type: 'string', value: '',
