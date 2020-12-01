@@ -158,7 +158,7 @@ igd_prepareBranch()
 	fi
 
 	git checkout ${igd_BRANCH}
-	git pull
+	git pull --no-rebase
 }
 
 igd_updateDebianChangelog()
