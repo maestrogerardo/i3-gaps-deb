@@ -23,7 +23,7 @@
 igd_BASEDIR="$(pwd)"
 igd_GITDIR="${igd_BASEDIR}/i3-gaps"
 igd_PATCHDIR="${igd_BASEDIR}/patches"
-igd_GITURL="https://www.github.com/Airblader/i3"
+igd_GITURL="https://github.com/Airblader/i3.git"
 igd_BRANCH_DEFAULT="gaps"
 igd_BRANCH_ALTERNATIVE="gaps-next"
 igd_BRANCH="${igd_BRANCH_DEFAULT}"
