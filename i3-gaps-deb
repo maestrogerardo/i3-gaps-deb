@@ -216,7 +216,7 @@ igd_updateDebianChangelog()
 	igd_log "Updating Debian changelog..."
 
 	local versionFoo="$(head -1 debian/changelog | cut -d'(' -f2 | cut -d'-' -f1 || echo "0.0.0")"
-	local versionBar="$(grep -P -o "\d+(?:\.\d+)+" I3_VERSION || echo "0.0.0")"
+	local versionBar="$(grep -P -o "\d+(?:\.\d+)+" I3_VERSION 2> /dev/null || echo "0.0.0")"
 
 	local version="${versionFoo}"
 	if dpkg --compare-versions "${versionFoo}" lt "${versionBar}"; then version="${versionBar}"; fi
