@@ -126,9 +126,12 @@ igd_ensureI3ToBeInstalled()
 {
 	igd_log "Checking i3 installation..."
 
-	if ! dpkg -s i3 &> /dev/null; then
-		if igd_question "i3 not found, install it using apt?" "y"; then
-			sudo apt -y install i3
+	if ! dpkg -s i3-wm &> /dev/null; then
+		if igd_question "i3 window manager not found, install it using apt?" "y"; then
+			sudo apt -y install i3-wm
+			if igd_question "Install also i3 metapackage (recommended tools)?" "y"; then
+				sudo apt -y install i3
+			fi
 		else
 			exit 42
 		fi
