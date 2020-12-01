@@ -361,18 +361,16 @@ mode "\$mode_gaps_left" {
         bindsym Return mode "\$mode_gaps"
         bindsym Escape mode "default"
 }
+
 EOF
 }
 
-igd_configHintPart1()
+igd_configHint()
 {
-	gad_readAndContinue "Please append the following lines to your (existing) i3-config and restart..."
+	gad_readAndContinue "You might consider appending the following lines to your (existing) i3-config..."
 	igd_printI3GapsConfig
-}
 
-igd_configHintPart2()
-{
-	gad_readAndContinue "...you can print them at any time later using \"${0} --config\"..."
+	gad_readAndContinue "You can print them at any time later using \"${0} --config\"..."
 }
 
 igd_updatePotentialConfigs()
@@ -384,6 +382,17 @@ igd_updatePotentialConfigs()
 			igd_printI3GapsConfig >> ${f}
 		fi
 	done
+}
+
+igd_handleConfig()
+{
+	igd_configHint
+	igd_updatePotentialConfigs
+}
+
+igd_byeBye()
+{
+	gad_log "Done! Now you should be prepared to (re)start i3..."
 }
 
 main()
@@ -404,10 +413,9 @@ main()
 	igd_buildDebianPackages
 	igd_switchToBaseDir
 	igd_installDebianPackages
+	igd_handleConfig
 	igd_cleanUp
-	igd_configHintPart1
-	igd_configHintPart2
-	igd_updatePotentialConfigs
+	igd_byeBye
 }
 
 main ${@}
