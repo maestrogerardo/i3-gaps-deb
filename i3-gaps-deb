@@ -78,9 +78,9 @@ igd_ensureI3ToBeInstalled()
 
 	if ! dpkg -s i3-wm &> /dev/null; then
 		if gad_question "i3 window manager not found, install it using apt?" "y"; then
-			sudo apt -y install i3-wm
+			sudo apt --mark-auto -y install i3-wm
 			if gad_question "Install also i3 metapackage (recommended tools)?" "y"; then
-				sudo apt -y install i3
+				sudo apt --mark-auto -y install i3
 			fi
 		else
 			exit 42
@@ -101,10 +101,10 @@ igd_checkSourcesList()
 igd_installBuildDeps()
 {
 	gad_readAndContinue "Installing (basic) build dependencies..."
-	sudo apt -y build-dep i3-wm
+	sudo apt --mark-auto -y build-dep i3-wm
 
 	gad_readAndContinue "Installing (additional) build dependencies..."
-	sudo apt -y install \
+	sudo apt --mark-auto -y install \
 		devscripts dpkg-dev \
 		dh-autoreconf \
 		libxcb-xrm-dev \
@@ -121,7 +121,7 @@ igd_ensureGitToBeInstalled()
 
 	if ! dpkg -s git &> /dev/null; then
 		if gad_question "git not found, install it using apt?" "y"; then
-			sudo apt -y install git
+			sudo apt --mark-auto -y install git
 		else
 			exit 44
 		fi
