@@ -10,7 +10,7 @@ and finally produces common Debian packages.
   - `git clone git@github.com:maestrogerardo/i3-gaps-deb.git`
   - `cd i3-gaps-deb`
   - `./i3-gaps-deb`
-  - # follow the interactive prompts
+  - `# follow the interactive prompts`
 
 ## What's the purpose?
 _i3-gaps_ simply does not exist in Debian (so far).
